@@ -1,0 +1,6 @@
+
+Este é um documento confidencial da empresa TechSecure.
+
+Este arquivo será utilizado para testar o algoritmo RC5,
+verificando se os dados podem ser criptografados e
+posteriormente recuperados corretamente.
