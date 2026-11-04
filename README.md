@@ -2,7 +2,7 @@
 
 Implementações didáticas de **DES**, **RC5** e **AES**, acompanhadas de testes e de uma demonstração de cifragem e recuperação de arquivo com AES. O projeto responde à Missão 3 do enunciado *SecureDocs — Como proteger documentos confidenciais em um ambiente digital hostil?*: após a cópia de arquivos protegidos por cifras clássicas, é necessário comparar alternativas atuais e explicar também como entregar a chave ao destinatário.
 
-> **Estado da implementação:** o experimento disponível usa **AES-256-CBC**. A recomendação para uma evolução do SecureDocs é **AES-256-GCM**, mas **GCM e a entrega segura da chave ainda não estão implementados neste repositório**. A demonstração atual salva a chave em texto claro em um arquivo `.key`; portanto, não deve ser usada com documentos ou chaves reais.
+> **Estado da implementação:** a escolha demonstrada neste projeto é **AES-256-CBC**. A cifragem e a recuperação de arquivos funcionam no experimento, mas o modo CBC usado aqui não verifica a integridade nem autentica o conteúdo. A chave também é salva em texto claro em um arquivo `.key`. Esta implementação é didática e não deve ser usada com documentos ou chaves reais.
 
 ## Entregas e estado atual
 
@@ -68,9 +68,9 @@ Implementa a cifra de bloco AES com S-box, expansão de chave, `SubBytes`, `Shif
 | Chave | 56 bits efetivos | Comprimento variável; exemplo dos testes: 16 bytes | 128, 192 ou 256 bits; experimento: 256 bits |
 | Rodadas | 16 | 12 por padrão | 10, 12 ou 14 conforme a chave |
 | Uso de arquivo no código | CBC com IV | Blocos independentes | CBC com IV |
-| Emprego proposto | Apenas didático | Apenas didático | Base da solução, após acrescentar autenticação e gestão segura de chaves |
+| Emprego no projeto | Apenas didático | Apenas didático | Algoritmo escolhido; experimento implementado em AES-256-CBC |
 
-**Decisão de projeto:** recomendar AES-256-GCM para proteger documentos na evolução do SecureDocs. AES possui especificação padronizada; GCM acrescenta autenticação ao processo de cifragem, permitindo rejeitar arquivos alterados quando o modo for implementado corretamente. Isso é uma **proposta**, distinta do AES-256-CBC que o código já demonstra. DES não é adequado para novos arquivos; RC5 exige escolhas de parâmetros e, neste projeto, o modo de arquivo não fornece as propriedades necessárias. As implementações locais são educativas e não foram auditadas para produção.
+**Decisão da missão:** escolher **AES**, demonstrado neste repositório como **AES-256-CBC**. O AES possui especificação padronizada, e o experimento mostra a cifragem e a recuperação do arquivo com chave de 256 bits e IV aleatório. DES não é adequado para novos arquivos; RC5 exige escolhas de parâmetros e, neste projeto, cifra cada bloco de arquivo independentemente. **A implementação AES-256-CBC existente atende à demonstração de confidencialidade e recuperação, mas não autentica o arquivo cifrado.** Para atender também à integridade e à entrega segura da chave em um sistema real, são necessários mecanismos adicionais, ainda ausentes do código. As implementações são educativas e não foram auditadas para produção.
 
 ## Entrega da chave ao destinatário
 
@@ -80,7 +80,7 @@ A chave simétrica usada para cifrar o documento precisa chegar somente ao desti
 
 ## Limitações e próximos passos
 
-1. Implementar cifragem autenticada para os arquivos, preferencialmente AES-GCM, com armazenamento correto do nonce e da tag, e teste de rejeição após adulteração.
+1. Acrescentar autenticação ao fluxo de arquivos e teste de rejeição após adulteração; o AES-256-CBC atual, sozinho, não fornece essa verificação.
 2. Implementar a entrega segura da chave e autenticar a chave pública do destinatário; retirar o `.key` em texto claro do fluxo final.
 3. Validar rigorosamente chaves, IV, comprimento do texto cifrado e preenchimento nas APIs públicas de AES; os testes atuais não cobrem esses casos por completo.
 4. Preparar o resumo formal separado e os slides de 10 minutos com evidências das execuções reais, se esses produtos forem entregues pelo repositório.
@@ -93,5 +93,4 @@ A chave simétrica usada para cifrar o documento precisa chegar somente ao desti
 - [Ronald Rivest — The RC5 Encryption Algorithm](https://people.csail.mit.edu/rivest/pubs/pubs/Riv94.pdf).
 - [NIST FIPS 197 — AES](https://csrc.nist.gov/pubs/fips/197/final).
 - [NIST SP 800-38A — modos de confidencialidade, incluindo CBC](https://csrc.nist.gov/pubs/sp/800/38/a/final).
-- [NIST SP 800-38D — GCM](https://csrc.nist.gov/pubs/sp/800/38/d/final).
 - [NIST SP 800-56B Rev. 2 — estabelecimento e transporte de chaves com RSA](https://csrc.nist.gov/pubs/sp/800/56/b/r2/final).
